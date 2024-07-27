@@ -1,0 +1,33 @@
+{
+    "name": "mxmilu666/nyadav",
+    "description": "The simple WebDAV client for PHP and Swoole",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Mxmilu666",
+            "email": "mxmilu666@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0 || ^8.1 || ^8.2",
+        "ext-swoole": "^5.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "NyaDAV\\": "src/"
+        }
+    },
+    "keywords": [
+        "webdav",
+        "php",
+        "swoole",
+        "client",
+        "library"
+    ],
+    "config": {
+        "sort-packages": true
+    }
+}
