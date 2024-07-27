@@ -45,10 +45,10 @@ class NyaDAV {
         } elseif ($client->statusCode === -1) {
             $this->err = "Connection failed: " . $client->errCode;
             return false;
-        } else {
+        } elseif ($client->statusCode === 207) {
             $responseXml = $client->body;
             $xml = new SimpleXMLElement($responseXml);
-            $items = [];
+            $list = [];
             foreach ($xml->children('D', true)->response as $response) {
                 $href = (string) $response->href;
                 $displayName = (string) $response->propstat->prop->displayname;
@@ -63,10 +63,14 @@ class NyaDAV {
                     'CreationDate' => $creationDate,
                 ];
             }
+        }else{
+            $this->err = "Connection failed: " . $client->statusCode;
+            return false;
         }
         return $list;
     }
-    function getfilesize($path) {
+    
+    public function getfilesize($path) {
         $client = $this->client;
         $client->set(['timeout' => 10]);
         $client->setMethod('HEAD');
@@ -79,7 +83,6 @@ class NyaDAV {
         $client = $this->client;
         if(is_null($filename)){
             $client->get($path);
-            print_r($client->headers);
             return [
                 'etag' => $client->headers['etag'],
                 'raw_url' => $client->headers['location']
@@ -89,4 +92,50 @@ class NyaDAV {
             return $client->download($path,$filename);
         }
     }
+
+    public function uploadfile($path, $filename) {
+        $client = $this->client;
+        $fileContents = file_get_contents($filename);
+        if ($fileContents === false) {
+            $this->err = "Failed to read the local file.";
+            return false;
+        }
+
+        $client->setMethod('PUT');
+        $client->setData($fileContents);
+        $client->execute($path);
+
+        if ($client->statusCode === 401) {
+            $this->err = "Authentication failed.";
+            return false;
+        } elseif ($client->statusCode === -1) {
+            $this->err = "Connection failed: " . $client->errCode;
+            return false;
+        } elseif ($client->statusCode >= 400) {
+            $this->err = "Failed to upload file: HTTP " . $client->statusCode;
+            return false;
+        }
+
+        return true;
+    }
+
+    public function deletefile($path) {
+        $client = $this->client;
+        $client->setMethod('DELETE');
+        $client->execute($path);
+
+        if ($this->client->statusCode === 401) {
+            $this->err = "Authentication failed.";
+            return false;
+        } elseif ($this->client->statusCode === -1) {
+            $this->err = "Connection failed: " . $this->client->errCode;
+            return false;
+        } elseif ($this->client->statusCode >= 400) {
+            $this->err = "Failed to upload file: HTTP " . $this->client->statusCode;
+            return false;
+        }
+
+        return true;
+    }
 }
+
