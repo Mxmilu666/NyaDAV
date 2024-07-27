@@ -21,6 +21,14 @@
 - PHP 8.0+
 - Swoole 5.1.0+
 
+## Installation
+
+You can install NyaDAV via Composer:
+
+```sh
+composer require mxmilu666/nyadav
+```
+
 # Usage
 
 ## Initialize the Client
