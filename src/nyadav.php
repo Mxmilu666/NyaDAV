@@ -79,7 +79,7 @@ class NyaDAV {
                 return false;
             case 207:
                 $responseXml = $client->body;
-                $xml = new SimpleXMLElement($responseXml);
+                $xml = new \SimpleXMLElement($responseXml);
                 $list = [];
                 foreach ($xml->children('D', true)->response as $response) {
                     $href = (string) $response->href;
