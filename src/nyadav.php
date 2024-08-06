@@ -134,6 +134,7 @@ class NyaDAV {
                 default:
                     return [
                         'etag' => $client->headers['etag'],
+                        'size'=> $client->headers['content-length'],
                         'raw_url' => $client->headers['location']
                     ];
                 
