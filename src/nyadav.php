@@ -233,7 +233,11 @@ class NyaDAV {
         }
     }
 
-    public function close($path) {
+        /**
+     * Close connection.
+     */
+
+    public function close() {
         $client = $this->client;
         $client->close();
     }
