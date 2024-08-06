@@ -61,6 +61,7 @@ $dav->set([
 ```php
 try {
     $files = $dav->getfilelist('/remote.php/webdav/');
+    $dav->close();
     print_r($files);
 } catch (NyaDAVException $e) {
     echo $dav->err;
@@ -73,6 +74,7 @@ try {
 ## Get File Size
 ```php
 $size = $dav->getfilesize('/remote.php/webdav/test.txt');
+$dav->close();
 echo 'File Size: ' . $size;
 
 ```
@@ -81,12 +83,14 @@ echo 'File Size: ' . $size;
 Local download:
 ```php
 $fileInfo = $dav->getfile('/remote.php/webdav/test.txt', 'local_test.txt');
+$dav->close();
 print_r($fileInfo);
 
 ```
 Cloud download (302):
 ```php
 $fileInfo = $dav->getfile('/remote.php/webdav/test.txt');
+$dav->close();
 print_r($fileInfo);
 
 ```
@@ -95,6 +99,7 @@ print_r($fileInfo);
 ```php
 try {
     $success = $dav->uploadfile('/remote.php/webdav/uploaded.txt', 'local_upload.txt');
+    $dav->close();
     if ($success) {
         echo 'File uploaded successfully!';
     }
@@ -110,6 +115,7 @@ try {
 ```php
 try {
     $success = $dav->deletefile('/remote.php/webdav/uploaded.txt');
+    $dav->close();
     if ($success) {
         echo 'File deleted successfully!';
     }
@@ -125,6 +131,7 @@ try {
 ```php
 try {
     $success = $dav->file_exists('/remote.php/webdav/test.txt');
+    $dav->close();
     if ($success) {
         echo 'exists';
     }

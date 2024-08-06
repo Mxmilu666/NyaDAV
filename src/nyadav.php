@@ -232,4 +232,9 @@ class NyaDAV {
                 return true;
         }
     }
+
+    public function close($path) {
+        $client = $this->client;
+        $client->close();
+    }
 }
