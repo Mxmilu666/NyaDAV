@@ -121,6 +121,24 @@ try {
 
 ```
 
+## File Exists
+```php
+try {
+    $success = $dav->file_exists('/remote.php/webdav/test.txt');
+    if ($success) {
+        echo 'exists';
+    }
+    else{
+        echo 'not exist';
+    }
+} catch (NyaDAVException $e) {
+    echo $dav->err;
+    //or
+    echo 'Error: ' . $e->getMessage();
+}
+
+```
+
 # Contributing
 
 Feel free to contribute by opening issues or submitting pull requests. We welcome all contributions! 🌟

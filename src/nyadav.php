@@ -126,12 +126,26 @@ class NyaDAV {
         $client = $this->client;
         if (is_null($filename)) {
             $client->get($path);
-            return [
-                'etag' => $client->headers['etag'],
-                'raw_url' => $client->headers['location']
-            ];
+            switch ($client->statusCode) {
+                case 404:
+                    $this->err = "Failed to getfile: HTTP " . $client->statusCode;
+                    throw new NyaDAVException("Failed to getfile: HTTP " . $client->statusCode);
+                    return false;
+                default:
+                    return [
+                        'etag' => $client->headers['etag'],
+                        'raw_url' => $client->headers['location']
+                    ];
+                
+            }
         } else {
             return $client->download($path, $filename);
+            switch ($client->statusCode) {
+                case 404:
+                    $this->err = "Failed to getfile: HTTP " . $client->statusCode;
+                    throw new NyaDAVException("Failed to getfile: HTTP " . $client->statusCode);
+                    return false; 
+            }
         }
     }
 
@@ -196,6 +210,23 @@ class NyaDAV {
             case $client->statusCode >= 400:
                 $this->err = "Failed to delete file: HTTP " . $client->statusCode;
                 throw new NyaDAVException("Failed to delete file: HTTP " . $client->statusCode);
+                return false;
+            default:
+                return true;
+        }
+    }
+
+        /**
+     * Retrieve whether the file exists.
+     * @param string $path
+     * @return bool
+     * @throws NyaDAVException
+     */
+    public function file_exists($path) {
+        $client = $this->client;
+        $client->get($path);
+        switch ($client->statusCode) {
+            case 404:
                 return false;
             default:
                 return true;
