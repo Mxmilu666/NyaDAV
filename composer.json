@@ -10,9 +10,8 @@
             "role": "Developer"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "php": "^8.0 || ^8.1 || ^8.2",
+        "php": "^8.0",
         "ext-swoole": "^5.1.0"
     },
     "require-dev": {
@@ -29,8 +28,5 @@
         "swoole",
         "client",
         "library"
-    ],
-    "config": {
-        "sort-packages": true
-    }
+    ]
 }
