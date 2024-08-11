@@ -127,17 +127,16 @@ class NyaDAV {
         if (is_null($filename)) {
             $client->get($path);
             switch ($client->statusCode) {
-                case 404:
-                    $this->err = "Failed to getfile: HTTP " . $client->statusCode;
-                    throw new NyaDAVException("Failed to getfile: HTTP " . $client->statusCode);
-                    return false;
-                default:
+                case 302:
                     return [
                         'etag' => $client->headers['etag'],
                         'size'=> $client->headers['content-length'],
                         'raw_url' => $client->headers['location']
                     ];
-                
+                default:
+                $this->err = "Failed to getfile: HTTP " . $client->statusCode;
+                throw new NyaDAVException("Failed to getfile: HTTP " . $client->statusCode);
+                return false;
             }
         } else {
             return $client->download($path, $filename);
